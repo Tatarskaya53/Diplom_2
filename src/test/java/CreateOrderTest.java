@@ -1,3 +1,5 @@
+import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
 import order.Order;
 import order.OrderClient;
 import org.junit.After;
@@ -7,6 +9,7 @@ import user.User;
 import user.UserClient;
 
 import java.util.List;
+
 import static org.apache.http.HttpStatus.*;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -18,7 +21,8 @@ public class CreateOrderTest {
     UserClient userClient = new UserClient();
 
     @Before
-    public void setup(){
+    @Step("Созданиие рандомного пользователя, получение списка ингредиентов")
+    public void setup() {
         user = User.createRandomUser();
         token = userClient.createUniqueUser(user)
                 .then()
@@ -30,13 +34,16 @@ public class CreateOrderTest {
     }
 
     @After
+    @Step("Удаление пользователя")
     public void teardown() {
         userClient.deleteUser(user, token);
         System.out.println("User removed");
     }
 
     @Test
-    public void createOrderWithAuthorizationTest(){
+    @DisplayName("Создание заказа с авторизацией")
+    @Step("Создание заказа")
+    public void createOrderWithAuthorizationTest() {
         Order order = new Order(data);
         orderClient.createOrder(order, token)
                 .then().log().all()
@@ -46,7 +53,9 @@ public class CreateOrderTest {
     }
 
     @Test
-    public void createOrderWithoutAuthorizationTest(){
+    @DisplayName("Создание заказа без авторизации")
+    @Step("Создание заказа")
+    public void createOrderWithoutAuthorizationTest() {
         Order order = new Order(data);
         token = "";
         orderClient.createOrder(order, token)
@@ -57,7 +66,9 @@ public class CreateOrderTest {
     }
 
     @Test
-    public void createOrderWithIngredientsTest(){
+    @DisplayName("Создание заказа с ингредиентами")
+    @Step("Создание заказа")
+    public void createOrderWithIngredientsTest() {
         Order order = new Order(data);
         orderClient.createOrder(order, token)
                 .then().log().all()
@@ -67,7 +78,9 @@ public class CreateOrderTest {
     }
 
     @Test
-    public void createOrderWithoutIngredientsTest(){
+    @DisplayName("Создание заказа без ингредиентов")
+    @Step("Создание заказа")
+    public void createOrderWithoutIngredientsTest() {
         data = List.of();
         Order order = new Order(data);
         orderClient.createOrder(order, token)
@@ -78,7 +91,9 @@ public class CreateOrderTest {
     }
 
     @Test
-    public void createOrderWithInvalidHashTest(){
+    @DisplayName("Создание заказа с неверным хешем ингредиентов")
+    @Step("Создание заказа")
+    public void createOrderWithInvalidHashTest() {
         data = List.of("invalidHash", "invalidHash");
         Order order = new Order(data);
         orderClient.createOrder(order, token)

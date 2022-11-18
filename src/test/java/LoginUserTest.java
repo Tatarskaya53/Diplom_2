@@ -1,3 +1,5 @@
+import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +16,7 @@ public class LoginUserTest {
     private String token;
 
     @Before
+    @Step("Созданиие рандомного пользователя")
     public void setup() {
         user = User.createRandomUser();
         token = userClient.createUniqueUser(user)
@@ -23,13 +26,16 @@ public class LoginUserTest {
     }
 
     @After
+    @Step("Удаление пользователя")
     public void teardown() {
         userClient.deleteUser(user, token);
         System.out.println("User removed");
     }
 
     @Test
-    public void validLoginUserTest(){
+    @DisplayName("Логин пользователя")
+    @Step("Логин под существующим пользователем")
+    public void validLoginUserTest() {
         UserCredentials credentials = UserCredentials.from(user);
         userClient.loginUser(credentials)
                 .then().log().all()
@@ -39,7 +45,9 @@ public class LoginUserTest {
     }
 
     @Test
-    public void invalidLoginUserTest(){
+    @DisplayName("Логин пользователя")
+    @Step("Логин  с неверным логином и паролем")
+    public void invalidLoginUserTest() {
         UserCredentials credentials = UserCredentials.from(user);
         credentials.setEmail("wrong");
         credentials.setPassword("wrong");
