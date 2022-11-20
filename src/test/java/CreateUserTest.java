@@ -1,4 +1,3 @@
-import io.qameta.allure.Step;
 import user.User;
 import user.UserClient;
 import user.UserCredentials;
@@ -16,13 +15,11 @@ public class CreateUserTest {
     private String token;
 
     @Before
-    @Step("Созданиие рандомного пользователя")
     public void setup() {
         user = User.createRandomUser();
     }
 
     @After
-    @Step("Удаление пользователя")
     public void teardown() {
         try {
             UserCredentials credentials = UserCredentials.from(user);
@@ -30,7 +27,6 @@ public class CreateUserTest {
                     .then()
                     .extract().path("accessToken");
             userClient.deleteUser(user, token);
-            System.out.println("User removed");
         } catch (IllegalArgumentException e) {
             System.out.println("User did not create");
         }
@@ -38,7 +34,6 @@ public class CreateUserTest {
 
     @Test
     @DisplayName("Создание уникального пользователя")
-    @Step("Создание пользователя")
     public void createUserTest() {
         userClient.createUniqueUser(user)
                 .then()
@@ -47,7 +42,6 @@ public class CreateUserTest {
 
     @Test
     @DisplayName("Создание пользователя, который уже зарегистрирован")
-    @Step("Создание пользователя")
     public void createIdenticalUserTest() {
         userClient.createUniqueUser(user);
         userClient.createUniqueUser(user)
@@ -60,7 +54,6 @@ public class CreateUserTest {
 
     @Test
     @DisplayName("Создание пользователя с пустым полем email")
-    @Step("Создание пользователя")
     public void createUserWithoutEmailTest() {
         user.setEmail("");
         userClient.createUniqueUser(user)
@@ -70,7 +63,6 @@ public class CreateUserTest {
 
     @Test
     @DisplayName("Создание пользователя без пароля")
-    @Step("Создание пользователя")
     public void createUserWithoutPassTest() {
         user.setPassword("");
         userClient.createUniqueUser(user)
@@ -80,7 +72,6 @@ public class CreateUserTest {
 
     @Test
     @DisplayName("Создание пользователя без имени")
-    @Step("Создание пользователя")
     public void createUserWithoutNameTest() {
         user.setName("");
         userClient.createUniqueUser(user)

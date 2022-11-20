@@ -1,4 +1,3 @@
-import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import order.OrderClient;
 import org.junit.After;
@@ -17,25 +16,20 @@ public class ReceivingUserOrdersTest {
     UserClient userClient = new UserClient();
 
     @Before
-    @Step("Созданиие рандомного пользователя")
     public void setup() {
         user = User.createRandomUser();
         token = userClient.createUniqueUser(user)
                 .then()
                 .extract().path("accessToken");
-        System.out.println("User created");
     }
 
     @After
-    @Step("Удаление пользователя")
     public void teardown() {
         userClient.deleteUser(user, token);
-        System.out.println("User removed");
     }
 
     @Test
     @DisplayName("Получение заказов авторизованного пользователя")
-    @Step("Получение заказов пользователя")
     public void getAuthorizedUserOrdersTest() {
         orderClient.getOrders(token)
                 .then().log().all()
@@ -45,7 +39,6 @@ public class ReceivingUserOrdersTest {
 
     @Test
     @DisplayName("Получение заказов неавторизованного пользователя")
-    @Step("Получение заказов пользователя")
     public void getNonAuthorizedUserOrdersTest() {
         orderClient.getOrders("")
                 .then().log().all()

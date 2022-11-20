@@ -1,6 +1,7 @@
 package user;
 
 import config.BaseClient;
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
 public class UserClient extends BaseClient {
@@ -9,12 +10,15 @@ public class UserClient extends BaseClient {
     private final String LOGIN = ROOT + "/login";
     private final String USER = ROOT + "/user";
 
+    @Step("Создание уникального пользователя")
     public Response createUniqueUser(User user) {
         return getSpec()
                 .body(user)
                 .when()
                 .post(REGISTER);
     }
+
+    @Step("Удаление пользователя")
     public Response deleteUser(User user, String token) {
         return getSpecToken(token)
                 .body(user)
@@ -22,6 +26,7 @@ public class UserClient extends BaseClient {
                 .delete(USER);
     }
 
+    @Step("Логин пользователя")
     public Response loginUser(UserCredentials credentials) {
         return getSpec()
                 .body(credentials)
@@ -29,6 +34,7 @@ public class UserClient extends BaseClient {
                 .post(LOGIN);
     }
 
+    @Step("Изменение данных пользователя")
     public Response patchUser(User user, String token) {
         return getSpecToken(token)
                 .body(user)
@@ -36,5 +42,3 @@ public class UserClient extends BaseClient {
                 .patch(USER);
     }
 }
-
-

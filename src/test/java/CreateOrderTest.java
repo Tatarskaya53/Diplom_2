@@ -1,4 +1,3 @@
-import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import order.Order;
 import order.OrderClient;
@@ -21,28 +20,23 @@ public class CreateOrderTest {
     UserClient userClient = new UserClient();
 
     @Before
-    @Step("Созданиие рандомного пользователя, получение списка ингредиентов")
     public void setup() {
         user = User.createRandomUser();
         token = userClient.createUniqueUser(user)
                 .then()
                 .extract().path("accessToken");
-        System.out.println("User created");
         data = orderClient.getIngredients()
                 .then().log().all()
                 .extract().path("data._id");
     }
 
     @After
-    @Step("Удаление пользователя")
     public void teardown() {
         userClient.deleteUser(user, token);
-        System.out.println("User removed");
     }
 
     @Test
     @DisplayName("Создание заказа с авторизацией")
-    @Step("Создание заказа")
     public void createOrderWithAuthorizationTest() {
         Order order = new Order(data);
         orderClient.createOrder(order, token)
@@ -54,7 +48,6 @@ public class CreateOrderTest {
 
     @Test
     @DisplayName("Создание заказа без авторизации")
-    @Step("Создание заказа")
     public void createOrderWithoutAuthorizationTest() {
         Order order = new Order(data);
         token = "";
@@ -67,7 +60,6 @@ public class CreateOrderTest {
 
     @Test
     @DisplayName("Создание заказа с ингредиентами")
-    @Step("Создание заказа")
     public void createOrderWithIngredientsTest() {
         Order order = new Order(data);
         orderClient.createOrder(order, token)
@@ -79,7 +71,6 @@ public class CreateOrderTest {
 
     @Test
     @DisplayName("Создание заказа без ингредиентов")
-    @Step("Создание заказа")
     public void createOrderWithoutIngredientsTest() {
         data = List.of();
         Order order = new Order(data);
@@ -92,7 +83,6 @@ public class CreateOrderTest {
 
     @Test
     @DisplayName("Создание заказа с неверным хешем ингредиентов")
-    @Step("Создание заказа")
     public void createOrderWithInvalidHashTest() {
         data = List.of("invalidHash", "invalidHash");
         Order order = new Order(data);

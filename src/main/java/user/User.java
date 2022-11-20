@@ -1,4 +1,5 @@
 package user;
+
 import lombok.Data;
 import org.apache.commons.lang3.RandomStringUtils;
 
